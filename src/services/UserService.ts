@@ -4,6 +4,7 @@ import { IndividualPerson } from "../entities/IndividualPerson";
 import { BusinessPerson } from "../entities/BusinessPerson";
 import { hashPassword } from "../utils/HashPassword";
 import { CreateUserDTO } from "../dtos/CreateUserDto";
+import { UpdateUserDTO } from "../dtos/UpdateUserDto";
 import { Repository } from "typeorm";
 
 export class UserService {
@@ -69,4 +70,44 @@ export class UserService {
     }
     return { user, profile: createdData };
   }
+
+  async update(id: number, data: UpdateUserDTO) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['individual', 'business'],
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    Object.assign(user, {
+      email: data.email ?? user.email
+    })
+  }
+  async findAll() {
+  return this.userRepository.find({
+    relations: ['individual', 'business'],
+  });
+  }
+
+  async delete(id: number) {
+  const user = await this.userRepository.findOne({
+    where: { id },
+    relations: ['individual', 'business'], 
+  });
+
+    if (!user) {
+      throw new Error("Usuário não encontrado");
+    }
+
+    if (user.individual) {
+      await this.individualRepository.remove(user.individual);
+    } else if (user.business) {
+      await this.businessRepository.remove(user.business);
+    }
+
+    await this.userRepository.remove(user);
+  }
+
 }

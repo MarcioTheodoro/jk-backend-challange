@@ -24,7 +24,7 @@ export class BusinessPerson {
   @Column({ length: 100, nullable: true })
   job_title?: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, (user) => user.business)
   @JoinColumn({ name: 'user_id' })
   user: User;
 }

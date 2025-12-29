@@ -21,7 +21,7 @@ export class IndividualPerson {
   @Column({ type: 'date' })
   birth_date: Date;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, (user) => user.individual)
   @JoinColumn({ name: 'user_id' })
   user: User;
 }

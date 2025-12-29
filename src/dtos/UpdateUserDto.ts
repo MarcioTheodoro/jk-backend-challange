@@ -1,39 +1,39 @@
 import {
   IsEmail,
   IsEnum,
-  IsNotEmpty,
   IsOptional,
   IsString,
   Length,
 } from "class-validator";
 
-export class CreateUserDTO {
+export class UpdateUserDTO {
+  @IsOptional()
   @IsEmail()
-  email!: string;
+  email?: string;
 
-  @IsString()
-  @Length(6, 255)
-  password!: string;
-
-  @IsEnum(["individual", "business"])
-  type!: "individual" | "business";
-
-  // ===== Pessoa Física =====
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
+  @Length(6, 255)
+  password?: string;
+
+  @IsOptional()
+  @IsEnum(["individual", "business"])
+  type?: "individual" | "business";
+
+  // Pessoa Física
+  @IsOptional()
+  @IsString()
   name?: string;
 
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   cpf?: string;
 
   @IsOptional()
   @IsString()
   birthDate?: string;
 
-  // ===== Pessoa Jurídica =====
+  // Pessoa Jurídica
   @IsOptional()
   @IsString()
   fantasyName?: string;
@@ -50,3 +50,4 @@ export class CreateUserDTO {
   @IsString()
   jobTitle?: string;
 }
+  

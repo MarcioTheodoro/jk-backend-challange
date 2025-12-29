@@ -3,8 +3,11 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
+import { IndividualPerson } from './IndividualPerson';
+import { BusinessPerson } from './BusinessPerson';
 
 @Entity('users')
 export class User {
@@ -19,6 +22,12 @@ export class User {
 
   @Column({ type: 'enum', enum: ['individual', 'business'] })
   type: 'individual' | 'business';
+
+  @OneToOne(() => IndividualPerson, (individual) => individual.user)
+  individual: IndividualPerson;
+
+  @OneToOne(() => BusinessPerson, (business) => business.user)
+  business: BusinessPerson;
 
   @CreateDateColumn()
   created_at: Date;
