@@ -8,11 +8,11 @@ import {
 } from "class-validator";
 
 export class CreateUserDTO {
-  @IsEmail()
+  @IsEmail({}, { message: "Email inválido" })
   email!: string;
 
   @IsString()
-  @Length(6, 255)
+  @Length(6, 255, {message: "A senha ter no mínimo 6 dígitos"})
   password!: string;
 
   @IsEnum(["individual", "business"])

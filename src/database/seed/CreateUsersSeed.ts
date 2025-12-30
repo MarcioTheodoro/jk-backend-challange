@@ -4,6 +4,7 @@ import { User } from "../../entities/User";
 import { hashPassword } from "../../utils/HashPassword";
 
 export const createUsersSeed = async () => {
+  await AppDataSource.initialize();
   const userRepo = AppDataSource.getRepository(User);
 
   const hashed = await hashPassword("123456");

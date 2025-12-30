@@ -24,18 +24,6 @@ export class UserService {
     });
     if (userExists) throw new Error("E-mail já cadastrado");
 
-    if (data.type === "individual") {
-      if (!data.name || !data.cpf || !data.birthDate) {
-        throw new Error("Dados de pessoa física incompletos");
-      }
-    }
-
-    if (data.type === "business") {
-      if (!data.fantasyName || !data.cnpj) {
-        throw new Error("Dados de pessoa jurídica incompletos");
-      }
-    }
-
     const hashedPassword = await hashPassword(data.password);
     const user = this.userRepository.create({
       email: data.email,
@@ -75,11 +63,14 @@ export class UserService {
     const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new Error('Usuário não encontrado');
     }
 
+    const hashedPassword = await hashPassword(data.password);
+
     Object.assign(user, {
-      email: data.email ?? user.email
+      email: data.email ?? user.email,
+      password: hashedPassword ?? user.password
     });
     await this.userRepository.save(user);
     return user;

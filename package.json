@@ -4,9 +4,11 @@
   "description": "Neste desafio, você deverá desenvolver uma **API RESTful** para gerenciar usuários, que será consumida pelo frontend desenvolvido no desafio complementar.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "seed:run": "ts-node src/database/seed/CreateUsersSeed.ts"
+    "seed:run": "ts-node src/database/seed/CreateUsersSeed.ts",
+    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d src/database/data-source.ts"
   },
   "repository": {
     "type": "git",
@@ -38,10 +40,13 @@
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.0.3",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
   }

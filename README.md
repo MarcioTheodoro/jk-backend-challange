@@ -1,86 +1,114 @@
 # 🧠 Desafio Backend (API) - Fullstack Developer
 
-Neste desafio, você deverá desenvolver uma **API RESTful** para gerenciar usuários, que será consumida pelo frontend desenvolvido no desafio complementar.
-
-## ⚙️ Tecnologias Obrigatórias
-
-- [Node.js](https://nodejs.org/)
-- [Express.js](https://expressjs.com/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [MySQL](https://www.mysql.com/)
+Esta é uma **API RESTful** para gerenciar usuários, podendo ser consumida por um frontend.
 
 ---
 
-## 🎯 O que deve ser implementado
+## ⚙️ Tecnologias Utilizadas
 
-### Recursos da API
+- Node.js
+- Express.js
+- TypeScript
+- MySQL (via Docker)
+- TypeORM (ORM para banco)
+- Jest (testes unitários)
+- class-validator (validação de DTOs)
+- Docker e Docker Compose
+
+---
+
+## 🎯 Funcionalidades da API
 
 - `POST /users/auth/login` — login com e-mail e senha
-- `DELETE /users/auth/logout` — logout do sistema e inativação do token de acesso
+- `DELETE /users/auth/logout` — logout e invalidação do token
 - `GET /users` — listagem de usuários
 - `POST /users` — criação de usuário
 - `PUT /users/:id` — edição de usuário
 - `DELETE /users/:id` — remoção de usuário
 
-> A autenticação deve set feita com token JWT.
+> A autenticação é feita via JWT.
 
 ---
 
-## 📚 Requisitos Técnicos
+## 📁 Estrutura do Projeto
 
-- Uso de **TypeScript**
-- Organização por camadas (controllers, services, routes, etc)
-- Conexão com banco de dados MySQL (pode usar ORM como TypeORM ou query builder)
-- CORS liberado para consumo pelo frontend
-
----
-
-## 🌟 Diferenciais
-
-Os seguintes pontos não são obrigatórios, mas contarão como **diferenciais** na avaliação:
-
-- Documentação da API com Swagger ou similar
-- Testes unitários (com Jest)
-- Middleware de tratamento de erros
-- Validação de entrada (ex: class-validator ou similar)
-- Scripts para criação e seed do banco
-
----
-
-## 📁 Estrutura Inicial do Projeto
-```
-node-api-challenge/
+jk-backend-challenge/
 ├── src/
-│   ├── controllers/
-│   ├── entities/
-│   ├── routes/
-│   ├── services/
-│   ├── middlewares/
-│   ├── database/
-│   │   ├── migrations/
-│   │   └── seed/
-│   ├── utils/
-│   └── index.ts
+| ├── config/
+│ ├── controllers/
+│ ├── database/
+│ │ ├── migrations/
+│ │ └── seed/
+| ├── dtos/
+│ ├── entities/
+│ ├── middlewares/
+│ ├── routes/
+│ ├── services/
+│ ├── utils/
+│ └── index.ts
 ├── .env.example
+├── docker-compose.yml
 ├── tsconfig.json
 ├── package.json
 └── README.md
-```
-- 📄 .env.example
-```
-DB_HOST=localhost
+
+---
+
+## 🔧 Configuração do Ambiente
+
+### .env
+
+Crie um arquivo `.env` copiando o `.env.example` e ajustando conforme necessário:
+
+DB_HOST=mysql
 DB_PORT=3306
-DB_USER=root
+DB_USER=jk_user
 DB_PASSWORD=suasenha
 DB_NAME=desafio_fullstack
 JWT_SECRET=seusegredojwt
-```
+
+
+> Observação: `DB_HOST` será o nome do serviço MySQL no Docker Compose (`mysql`).
+
 ---
 
-### 🧩 Modelagem de Banco com Separação PF e PJ
-#### 🗂️ Tabelas
+## 🐳 Rodando com Docker
+
+1. **Criar o `docker-compose.yml`** (exemplo):
+
+```yaml
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: desafio_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: desafio_fullstack
+      MYSQL_USER: jk_user
+      MYSQL_PASSWORD: suasenha
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
 ```
--- Tabela base de usuários
+
+2. **Subir os containers:**
+```bash
+docker-compose up -d
+```
+
+---
+
+## 📂 Modelagem do Banco
+
+**Tabela base de usuários**
+
+```sql
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(100) NOT NULL UNIQUE,
@@ -89,8 +117,10 @@ CREATE TABLE users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+```
 
--- Pessoa Física
+**Pessoa Física**
+```sql
 CREATE TABLE individual_person (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -99,8 +129,10 @@ CREATE TABLE individual_person (
   birth_date DATE NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+```
 
--- Pessoa Jurídica
+**Pessoa Jurídica**
+```sql
 CREATE TABLE business_person (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -112,16 +144,45 @@ CREATE TABLE business_person (
 );
 ```
 
----
+## 🛠️ Instalação e Execução (Guia Rápido)
 
-## 🛠 Como rodar o projeto
+Este guia o levará pelos passos necessários para rodar o projeto localmente.
 
-```bash
-# Instalar dependências
-npm install
+### 1. Configuração Inicial (Setup)
 
-# Rodar migrations (se houver)
-npm run migration:run
+1.  **Clone o repositório:**
+    ```bash
+    git clone [URL_DO_SEU_REPOSITORIO]
+    cd jk-backend-challenge
+    ```
+2.  **Variáveis de Ambiente:** Crie o arquivo `.env` na raiz do projeto, baseado no modelo `.env.example`, e preencha as variáveis.
 
-# Iniciar projeto
-npm run dev
+3.  **Instale as dependências Node.js:**
+    ```bash
+    npm install
+    ```
+
+### 2. Subindo o Banco de Dados (Docker)
+
+O projeto usa Docker para orquestrar o banco de dados.
+
+4.  **Inicie os containers Docker** (o banco de dados será inicializado):
+    ```bash
+    docker-compose up -d
+    ```
+5.  **Rode as Migrações:** Execute os scripts para criar a estrutura do banco de dados (tabelas):
+    ```bash
+    npm run migration:run
+    ```
+6.  **Rode as Seeds:** Execute os scripts para criar a estrutura do banco de dados (tabelas):
+    ```bash
+    npm run seed:run
+    ```
+
+### 3. Iniciando a Aplicação
+
+7.  **Inicie a Aplicação** em modo de desenvolvimento:
+    ```bash
+    npm run dev
+    ```
+8.  **Teste os Endpoints:** Os *endpoints* da API agora estão ativos e podem ser testados usando ferramentas como **Postman**, **Insomnia** ou através da **documentação Swagger**.
