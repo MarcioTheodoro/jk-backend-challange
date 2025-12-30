@@ -72,10 +72,7 @@ export class UserService {
   }
 
   async update(id: number, data: UpdateUserDTO) {
-    const user = await this.userRepository.findOne({
-      where: { id },
-      relations: ['individual', 'business'],
-    });
+    const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
       throw new Error('User not found');
@@ -83,8 +80,11 @@ export class UserService {
 
     Object.assign(user, {
       email: data.email ?? user.email
-    })
+    });
+    await this.userRepository.save(user);
+    return user;
   }
+
   async findAll() {
   return this.userRepository.find({
     relations: ['individual', 'business'],

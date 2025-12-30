@@ -17,10 +17,10 @@ AppDataSource.initialize().then(() => {
   app.use("/users", userRoutes);
   app.use("/users/auth", authRoutes);
 
-  app.use(errorMiddleware);
-
   setupSwagger(app);
-
+  
+  app.use(errorMiddleware);
+  
   app.listen(3000, () => {
     console.log("Server running on http://localhost:3000");
   });

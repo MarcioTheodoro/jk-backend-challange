@@ -20,7 +20,7 @@ export class UpdateUserDTO {
   @IsEnum(["individual", "business"])
   type?: "individual" | "business";
 
-  // Pessoa Física
+
   @IsOptional()
   @IsString()
   name?: string;
@@ -33,7 +33,7 @@ export class UpdateUserDTO {
   @IsString()
   birthDate?: string;
 
-  // Pessoa Jurídica
+
   @IsOptional()
   @IsString()
   fantasyName?: string;

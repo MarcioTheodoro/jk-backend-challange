@@ -18,7 +18,7 @@ export class CreateUserDTO {
   @IsEnum(["individual", "business"])
   type!: "individual" | "business";
 
-  // ===== Pessoa Física =====
+  
   @IsOptional()
   @IsString()
   @IsNotEmpty()
@@ -33,7 +33,7 @@ export class CreateUserDTO {
   @IsString()
   birthDate?: string;
 
-  // ===== Pessoa Jurídica =====
+
   @IsOptional()
   @IsString()
   fantasyName?: string;

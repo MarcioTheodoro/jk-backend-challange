@@ -59,7 +59,6 @@ export class UserController {
     const createUserDto = plainToInstance(CreateUserDTO, req.body);
     const errors = await validate(createUserDto);
     if (errors.length > 0) {
-      // Mapeia os erros para ficar mais limpo para o front-end
       const formattedErrors = errors.map(error => ({
         property: error.property,
         constraints: error.constraints
@@ -99,7 +98,7 @@ export class UserController {
       const users = await this.userService.findAll();
       return res.json(users);
     } catch (error: any) {
-      return res.status(500).json({ message: "Erro ao listar usuários" });
+      return res.status(500).json({ message: error.mensage || "Erro ao listar usuários" });
     }
   }
 

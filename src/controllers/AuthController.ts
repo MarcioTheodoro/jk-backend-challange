@@ -7,9 +7,12 @@ export class AuthController {
   async login(req: Request, res: Response) {
     const { email, password } = req.body;
 
-    const token = await this.authService.login(email, password);
-
-    return res.json(token);
+    try {
+      const token = await this.authService.login(email, password);
+      return res.json(token);
+    } catch (error: any) {
+      return res.status(401).json({ message: error.message });
+    }
   }
 
   async logout(req: Request, res: Response) {
