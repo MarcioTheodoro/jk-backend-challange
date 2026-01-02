@@ -28,9 +28,9 @@ Esta é uma **API RESTful** para gerenciar usuários, podendo ser consumida por 
 
 > A autenticação é feita via JWT.
 
-```
 ## 📁 Estrutura do Projeto
 
+```
 jk-backend-challenge/
 ├── src/
 | ├── config/
@@ -58,13 +58,14 @@ jk-backend-challenge/
 
 Crie um arquivo `.env` copiando o `.env.example` e ajustando conforme necessário:
 
+```
 DB_HOST=mysql
 DB_PORT=3306
 DB_USER=jk_user
 DB_PASSWORD=suasenha
 DB_NAME=desafio_fullstack
 JWT_SECRET=seusegredojwt
-
+```
 
 > Observação: `DB_HOST` será o nome do serviço MySQL no Docker Compose (`mysql`).
 
