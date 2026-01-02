@@ -28,8 +28,7 @@ Esta é uma **API RESTful** para gerenciar usuários, podendo ser consumida por 
 
 > A autenticação é feita via JWT.
 
----
-
+```
 ## 📁 Estrutura do Projeto
 
 jk-backend-challenge/
@@ -51,8 +50,7 @@ jk-backend-challenge/
 ├── tsconfig.json
 ├── package.json
 └── README.md
-
----
+```
 
 ## 🔧 Configuração do Ambiente
 
