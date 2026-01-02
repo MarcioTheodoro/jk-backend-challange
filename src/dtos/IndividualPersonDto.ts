@@ -1,8 +1,9 @@
 import {
-  IsEmail, IsEnum, IsNotEmpty, IsString, MinLength, MaxLength, IsOptional, Length,
-  minLength,
+  IsNotEmpty, 
+  IsString, 
+  MaxLength, 
+  Length,
   IsDateString,
-  IsPositive
 } from 'class-validator';
 
 export class CreateIndividualPersonDTO {
